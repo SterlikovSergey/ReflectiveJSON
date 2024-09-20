@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import ru.clevertec.reflectivejson.entity.Customer;
 import ru.clevertec.reflectivejson.entity.Order;
 import ru.clevertec.reflectivejson.entity.Product;
+import ru.clevertec.reflectivejson.service.FromJsonConverter;
 import ru.clevertec.reflectivejson.service.ToJsonConverter;
 
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ public class ReflectiveJsonApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(ToJsonConverter toJsonConverter) {
+    public CommandLineRunner demo(ToJsonConverter toJsonConverter, FromJsonConverter fromJsonConverter) {
         return args -> {
 
             Product product1 = new Product();
@@ -51,7 +52,10 @@ public class ReflectiveJsonApplication {
             customer.setOrders(List.of(order));
 
             String json = toJsonConverter.toJson(customer);
-            System.out.println(json);
+            System.out.println("To json:" + json);
+
+            Customer customerFromJson = fromJsonConverter.fromJson(json, Customer.class);
+            System.out.println("FromJson: " + customerFromJson);
         };
     }
 }
